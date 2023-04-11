@@ -1,9 +1,8 @@
 const express = require("express");
+const { router } = require("./router.js");
 const app = express();
 
-app.get("/", (req, res) => {
-	res.send("Hello World!");
-});
+app.use(router);
 
 app.listen(5050);
 console.log("http://localhost:5050");
