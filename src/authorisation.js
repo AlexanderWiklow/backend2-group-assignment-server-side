@@ -12,4 +12,4 @@ function validateToken(token) {
 	return verify(token, key);
 }
 
-exports = { generateToken, validateToken };
+module.exports = { generateToken, validateToken };
