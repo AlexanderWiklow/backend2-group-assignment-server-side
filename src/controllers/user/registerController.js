@@ -1,5 +1,7 @@
 const bcrypt = require("bcrypt");
+
 const database = require("../../database.js");
+const { createSession } = require("../../session.js");
 
 async function registerController(req, res) {
 	const { username, password } = req.body;
@@ -14,9 +16,10 @@ async function registerController(req, res) {
 	});
 
 	const userID = insertedId.toString();
-	console.log("User created with ID: " + userID);
+	console.log("User registered with ID: " + userID);
 
-	// TODO: createSession(userID, res);
+	const { accessToken, cookieConfig } = createSession(userID);
+	res.cookie("accessToken", accessToken, cookieConfig);
 
 	return res.status(201).end();
 }
