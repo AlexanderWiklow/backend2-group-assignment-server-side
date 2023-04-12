@@ -1,23 +1,28 @@
 const cookie = require("cookie");
 const { ObjectId } = require("mongodb");
 
-const { generateToken } = require("./authorisation");
+const { generateToken, validateToken } = require("./authorisation");
 
-function createSession(userID, res) {
-	res.cookie("accessToken", generateToken(userID), { maxAge: 1000 * 60 * 60, path: "/", domain: "localhost", httpOnly: true });
+function createSession(userID) {
+	return { accessToken: generateToken(userID), cookieConfig: { maxAge: 1000 * 60 * 60, path: "/", domain: "localhost", httpOnly: true } };
 }
 
-function verifySession(req, res, next) {
+function verifySession(accessToken) {
+	const payload = validateToken(accessToken);
+
+	const { userID } = payload;
+	if (!userID) throw new Error("No userID in payload");
+	//check weather the userID is parsable as an ObjectId
+	new ObjectId(payload.userID);
+
+	return payload;
+}
+
+function verifySessionMiddleware(req, res, next) {
 	const { accessToken } = cookie.parse(req.headers.cookie || "");
 
-	let payload;
 	try {
-		payload = validateToken(accessToken);
-
-		const { userID } = payload;
-		if (!userID) throw new Error("No userID in payload");
-		//check weather the userID is parsable as an ObjectId
-		new ObjectId(payload.userID);
+		const payload = verifySession(accessToken);
 		console.log(`Access was granted on '${req.url}' to user with id: ${payload.userID ?? "ERR"}`);
 
 		req.body ? (req.body.jwt = payload) : (req.body = { jwt: payload });
@@ -28,4 +33,4 @@ function verifySession(req, res, next) {
 	}
 }
 
-exports = { createSession, verifySession };
+module.exports = { createSession, verifySession, verifySessionMiddleware };
