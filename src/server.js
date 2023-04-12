@@ -6,3 +6,5 @@ app.use(router);
 
 app.listen(5050);
 console.log("http://localhost:5050");
+
+exports.app = app;
