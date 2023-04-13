@@ -20,6 +20,7 @@ jobs:
         with:
           node-version: "18.x"
       - run: npm i
-      - run: $JWT_SECRET npm test
-      - env:
+      - name: test
+       run: $JWT_SECRET npm test
+       env:
           JWT_SECRET: ${{ vars.JWT_SECRET }}
