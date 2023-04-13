@@ -24,3 +24,4 @@ jobs:
         run: npm test
         env:
           JWT_SECRET: ${{ vars.JWT_SECRET }}
+          DATABASE_URL: ${{ vars.DATABASE_URL }}
