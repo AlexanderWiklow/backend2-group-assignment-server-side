@@ -10,6 +10,11 @@ async function registerController(req, res) {
 
 	const db = await database.getConnection();
 	const users = db.collection("users");
+
+	const foundUser = await users.findOne({ username });
+	const userAlreadyExists = foundUser === null ? false : true;
+	if (userAlreadyExists) return res.status(409).end();
+
 	const { insertedId } = await users.insertOne({
 		username,
 		password: hashedPassword
