@@ -12,12 +12,20 @@ const schema = {
       password: joi.string().required(),
     }),
   },
+  post: {
+    create: joi.object({
+      content: joi.string().required(),
+    }),
+  },
 };
 
 const validate = {
   user: {
     register: validator.body(schema.user.register),
     login: validator.body(schema.user.login),
+  },
+  post: {
+    create: validator.body(schema.post.create),
   },
 };
 
