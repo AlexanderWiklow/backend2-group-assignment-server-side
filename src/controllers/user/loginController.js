@@ -25,7 +25,9 @@ async function loginController(req, res) {
         const { accessToken, cookieConfig } = createSession(userID);
         res.cookie("accessToken", accessToken, cookieConfig);
 
-        return res.status(200).json({ message: "Login successful", user });
+        return res
+          .status(200)
+          .json({ message: "Login successful" + " " + user.username });
       } else {
         // Passwords do not match, return an error response
         return res.status(401).json({ error: "Wrong password" });
