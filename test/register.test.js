@@ -21,6 +21,15 @@ describe("POST /user", () => {
 		const cookie = response.headers["set-cookie"];
 		expect(cookie).toBeUndefined();
 	});
+
+	test("should return 409 when username is taken", async () => {
+		const response = await request(app).post("/user").send({ username: "test", password: "test" }).set("Accept", "application/json");
+
+		expect(response.status).toBe(409);
+
+		const cookie = response.headers["set-cookie"];
+		expect(cookie).toBeUndefined();
+	});
 });
 
 afterAll(async () => {
