@@ -9,6 +9,7 @@ async function profileController(req, res) {
 	if (foundUser === null) return res.status(404).json({ message: "User not found" });
 
 	const publicUser = {
+		id: foundUser._id,
 		username: foundUser.username,
 		posts: foundUser.posts
 	};

@@ -14,6 +14,7 @@ describe("GET /profile/:username", () => {
 
 		const user = response.body;
 		expect(typeof user).toBe("object");
+		expect(user).toHaveProperty("id");
 		expect(user).toHaveProperty("username");
 		expect(user).toHaveProperty("posts");
 	});
