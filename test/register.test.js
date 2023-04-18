@@ -1,7 +1,11 @@
 const request = require("supertest");
 
 const database = require("../src/database.js");
-const { app } = require("../src/server.js");
+const { router } = require("../src/router.js");
+
+const express = require("express");
+const app = express();
+app.use(router);
 
 describe("POST /user", () => {
 	test("should return 201, and give an accessToken", async () => {
@@ -29,11 +33,13 @@ describe("POST /user", () => {
 
 		const cookie = response.headers["set-cookie"];
 		expect(cookie).toBeUndefined();
+
+		const db = await database.getConnection();
+		db.collection("users").deleteMany({ username: "test" });
 	});
 });
 
 afterAll(async () => {
-	database.getConnection().then((db) => {
-		db.collection("users").deleteMany({ username: "test" });
-	});
+	const db = await database.getConnection();
+	db.collection("users").deleteMany({ username: "test" });
 });
