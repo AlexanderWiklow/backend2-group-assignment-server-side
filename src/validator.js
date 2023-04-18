@@ -34,7 +34,8 @@ const schema = {
       targetPost: joi.required().custom(isValidMongoDBObjectId),
     }),
     delete: joi.object({
-      Id: joi.number().required(),
+      postID: joi.string().required(),
+      userID: joi.string().required(),
     }),
   },
 };
@@ -50,7 +51,7 @@ const validate = {
     create: validator.body(schema.post.create),
     update: validator.body(schema.post.update),
     like: validator.body(schema.post.like),
-    delete: validator.params(joi.object({ Id: joi.string().required() })),
+    delete: validator.query(schema.post.delete),
   },
 };
 
