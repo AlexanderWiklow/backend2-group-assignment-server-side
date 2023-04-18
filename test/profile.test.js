@@ -1,6 +1,10 @@
 const request = require("supertest");
 
-const { app } = require("../src/server.js");
+const { router } = require("../src/router.js");
+
+const express = require("express");
+const app = express();
+app.use(router);
 
 describe("GET /profile/:username", () => {
 	test("should return 200 and the found user object", async () => {
