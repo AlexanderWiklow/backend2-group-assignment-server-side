@@ -39,12 +39,12 @@ describe("POST /user", () => {
 		expect(cookie).toBeUndefined();
 
 		const db = await database.getConnection();
-		db.collection("users").deleteMany({ username: "test" });
+		await db.collection("users").deleteMany({ username: "test" });
 	});
 });
 
 afterAll(async () => {
 	const db = await database.getConnection();
-	db.collection("users").deleteMany({ username: "test" });
+	await db.collection("users").deleteMany({ username: "test" });
 	await database.closeClient();
 });
