@@ -1,6 +1,8 @@
 const joi = require("joi");
 const validator = require("express-joi-validation").createValidator();
 
+const { isValidMongoDBObjectId } = require("./joi-custom-validators/objectIdValidator.js");
+
 const schema = {
 	user: {
 		register: joi.object({
@@ -18,7 +20,7 @@ const schema = {
 		}),
 		like: joi.object({
 			targetUser: joi.string().required(),
-			targetPost: joi.number().required().min(0)
+			targetPost: joi.required().custom(isValidMongoDBObjectId)
 		})
 	}
 };
