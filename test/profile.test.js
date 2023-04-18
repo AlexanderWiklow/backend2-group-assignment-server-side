@@ -9,6 +9,10 @@ const express = require("express");
 const app = express();
 app.use(router);
 
+beforeAll(async () => {
+	await database.getConnection();
+});
+
 describe("GET /profile/:username", () => {
 	test("should return 200 and the found user object", async () => {
 		const response = await request(app).get("/profile/Tor").set("Accept", "application/json");
@@ -62,4 +66,8 @@ describe("GET /profile/:username", () => {
 		expect(response.status).toBe(404);
 		expect(response.body).toEqual({ message: "User not found" });
 	});
+});
+
+afterAll(async () => {
+	await database.closeClient();
 });
