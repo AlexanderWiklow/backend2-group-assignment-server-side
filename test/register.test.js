@@ -33,11 +33,13 @@ describe("POST /user", () => {
 
 		const cookie = response.headers["set-cookie"];
 		expect(cookie).toBeUndefined();
+
+		const db = await database.getConnection();
+		db.collection("users").deleteMany({ username: "test" });
 	});
 });
 
 afterAll(async () => {
-	database.getConnection().then((db) => {
-		db.collection("users").deleteMany({ username: "test" });
-	});
+	const db = await database.getConnection();
+	db.collection("users").deleteMany({ username: "test" });
 });
