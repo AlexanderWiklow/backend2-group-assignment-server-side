@@ -7,6 +7,10 @@ const express = require("express");
 const app = express();
 app.use(router);
 
+beforeAll(async () => {
+	await database.getConnection();
+});
+
 describe("POST /user", () => {
 	test("should return 201, and give an accessToken", async () => {
 		const response = await request(app).post("/user").send({ username: "test", password: "test" }).set("Accept", "application/json");
@@ -42,4 +46,5 @@ describe("POST /user", () => {
 afterAll(async () => {
 	const db = await database.getConnection();
 	db.collection("users").deleteMany({ username: "test" });
+	await database.closeClient();
 });

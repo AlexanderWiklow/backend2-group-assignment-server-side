@@ -7,6 +7,10 @@ const express = require("express");
 const app = express();
 app.use(router);
 
+beforeAll(async () => {
+	await database.getConnection();
+});
+
 describe("POST /post/like", () => {
 	test("Should return 200 when toggling a like on a post", async () => {
 		const targetUser = "Tor";
@@ -61,4 +65,5 @@ afterAll(async () => {
 	await db.collection("users").deleteOne({ username: "test-post-like-toggle" });
 	await db.collection("users").deleteOne({ username: "test-post-like-invalid-user" });
 	await db.collection("users").deleteOne({ username: "test-post-like-invalid-post" });
+	await database.closeClient();
 });
