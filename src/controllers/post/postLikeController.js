@@ -1,3 +1,4 @@
+const { ObjectId } = require("mongodb");
 const database = require("../../database.js");
 
 async function postLikeController(req, res) {
@@ -7,34 +8,37 @@ async function postLikeController(req, res) {
 	const db = await database.getConnection();
 	const users = db.collection("users");
 
-	const user = await users.findOne({ username: targetUser });
-	if (!user) return res.status(404).json({ error: "User not found" });
+	const targetPostObjectId = new ObjectId(targetPost);
 
-	const postsCountIndex = user.posts.length - 1;
-	const targetPostOutOfIndex = targetPost > postsCountIndex;
-	if (targetPostOutOfIndex) return res.status(404).json({ error: "Post not found" });
+	const matchedUserAndPost = await users.findOne({ username: targetUser, "posts._id": targetPostObjectId });
+	console.log("matchedUserAndPost", matchedUserAndPost);
+	if (matchedUserAndPost === null) return res.status(404).json({ error: "User or post not found" });
 
-	const removeLikeResult = await users.findOneAndUpdate(
-		{ username: targetUser, [`posts.${targetPost}.likes`]: userID },
-		{
-			$pull: { [`posts.${targetPost}.likes`]: userID }
-		}
-	);
-	const didRemoveLike = removeLikeResult.lastErrorObject.updatedExisting;
-	if (didRemoveLike) {
+	//Can be optimised by running an aggregation in mongodb. For now this works.
+	const matchedPost = matchedUserAndPost.posts.find((post) => {
+		return post._id.toString() === targetPost;
+	});
+	const clientHasLiked = matchedPost.likes.includes(userID);
+
+	if (clientHasLiked) {
+		await users.findOneAndUpdate(
+			{ username: targetUser, "posts._id": targetPostObjectId },
+			{
+				$pull: { "posts.$.likes": userID }
+			}
+		);
 		console.log("Removed like");
 		return res.status(200).end();
 	}
 
 	await users.findOneAndUpdate(
-		{ username: targetUser },
+		{ username: targetUser, "posts._id": targetPostObjectId },
 		{
-			$push: { [`posts.${targetPost}.likes`]: userID }
+			$push: { "posts.$.likes": userID }
 		}
 	);
-
 	console.log("Added like");
-	return res.status(200).end();
+	return res.status(201).end();
 }
 
 module.exports = { postLikeController };
