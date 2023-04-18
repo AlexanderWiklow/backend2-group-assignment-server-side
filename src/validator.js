@@ -16,6 +16,9 @@ const schema = {
     create: joi.object({
       content: joi.string().required(),
     }),
+    update: joi.object({
+      content: joi.string().required(),
+    }),
   },
 };
 
@@ -26,6 +29,7 @@ const validate = {
   },
   post: {
     create: validator.body(schema.post.create),
+    update: validator.body(schema.post.update),
   },
 };
 
