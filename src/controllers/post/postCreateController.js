@@ -9,8 +9,11 @@ async function postCreateController(req, res) {
 
   const db = await database.getConnection();
   const post = {
+    _id: new ObjectId(),
     content,
     createdAt: new Date(),
+    likes: [],
+    comments: [],
   };
 
   await db
