@@ -6,6 +6,7 @@ const { verifySessionMiddleware } = require("./session");
 const { profileController } = require("./controllers/user/profileController");
 const { registerController } = require("./controllers/user/registerController");
 const { loginController } = require("./controllers/user/loginController");
+const { followController } = require("./controllers/user/followController");
 
 const { postCreateController } = require("./controllers/post/postCreateController");
 const { postUpdateController } = require("./controllers/post/postUpdateController");
@@ -23,6 +24,8 @@ router.get("/profile/:username", validate.user.profile, profileController);
 router.post("/user", json(), validate.user.register, registerController);
 
 router.post("/user/login", json(), validate.user.login, loginController);
+
+router.post("/follow", json(), validate.user.follow, verifySessionMiddleware, followController);
 
 //post
 router.post("/post", json(), validate.post.create, verifySessionMiddleware, postCreateController);
