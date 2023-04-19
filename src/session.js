@@ -29,7 +29,7 @@ function verifySessionMiddleware(req, res, next) {
 		return next();
 	} catch (error) {
 		console.log(`Access was denied on '${req.url}'`);
-		return res.status(400).end();
+		return res.status(401).end();
 	}
 }
 
