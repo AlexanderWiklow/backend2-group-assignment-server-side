@@ -7,6 +7,7 @@ const { profileController } = require("./controllers/user/profileController");
 const { registerController } = require("./controllers/user/registerController");
 const { loginController } = require("./controllers/user/loginController");
 const { followController } = require("./controllers/user/followController");
+const { feedController } = require("./controllers/user/feedController.js");
 
 const { postCreateController } = require("./controllers/post/postCreateController");
 const { postUpdateController } = require("./controllers/post/postUpdateController");
@@ -17,7 +18,7 @@ const { postCommentController } = require("./controllers/post/postCommentControl
 const router = Router();
 
 router.get("/", (req, res) => {
-  res.send("Hello World!");
+	res.send("Hello World!");
 });
 
 //user
@@ -28,6 +29,8 @@ router.post("/user", json(), validate.user.register, registerController);
 router.post("/user/login", json(), validate.user.login, loginController);
 
 router.post("/follow", json(), validate.user.follow, verifySessionMiddleware, followController);
+
+router.get("/feed", verifySessionMiddleware, feedController);
 
 //post
 router.post("/post", json(), validate.post.create, verifySessionMiddleware, postCreateController);
