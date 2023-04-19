@@ -2,16 +2,26 @@ const { MongoClient } = require("mongodb");
 
 require("dotenv").config();
 
-async function init() {
+let connection, client;
+
+async function getConnection() {
 	const url = process.env.DATABASE_URL;
 
 	if (!url) throw new Error('No database url provided, please add one in the .env file using the following pattern: DATABASE_URL="mongodb+srv://<username>:<password>@<host>"');
 
-	const connection = await MongoClient.connect(url);
+	if (connection) return connection;
 
-	const database = connection.db("main-database");
+	client = await MongoClient.connect(url);
 
-	return database;
+	connection = client.db("main-database");
+	return connection;
 }
 
-exports.getConnection = init;
+async function closeClient() {
+	if (!client) return;
+
+	await client.close();
+	client = undefined;
+}
+
+module.exports = { getConnection, closeClient };

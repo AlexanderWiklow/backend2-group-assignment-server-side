@@ -5,6 +5,12 @@ const app = express();
 
 app.use(router);
 
+const database = require("../src/database.js");
+
+beforeAll(async () => {
+	await database.getConnection();
+});
+
 // two scenarios for login testing - one for success and one for failure
 describe("POST /user/login", () => {
   test("should return 200, and give an accessToken", async () => {
@@ -30,4 +36,8 @@ describe("POST /user/login", () => {
     const cookie = response.headers["set-cookie"];
     expect(cookie).toBeUndefined();
   });
+});
+
+afterAll(async () => {
+	await database.closeClient();
 });
