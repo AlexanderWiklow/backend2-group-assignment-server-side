@@ -26,6 +26,6 @@ router.post("/post", json(), validate.post.create, verifySessionMiddleware, post
 
 router.post("/post/like", json(), validate.post.like, verifySessionMiddleware, postLikeController);
 
-router.put("/post/:postID", json(), validate.post.update, verifySessionMiddleware, postUpdateController);
+router.put("/post/:postId", json(), validate.post.update, verifySessionMiddleware, postUpdateController);
 
 exports.router = router;
