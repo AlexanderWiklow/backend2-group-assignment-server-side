@@ -20,7 +20,7 @@ async function profileController(req, res) {
 
 	const clientIsProfileOwner = foundUser._id.toString() === userID;
 	let clientIsFollowing;
-	if (clientIsProfileOwner) {
+	if (clientIsProfileOwner || !userID) {
 		clientIsFollowing = false;
 	} else {
 		clientIsFollowing = !!(await db.collection("users").findOne({ _id: new mongodb.ObjectId(userID), follows: foundUser._id.toString() }));
