@@ -34,11 +34,11 @@ describe("GET /feed", () => {
 			expect(user).toHaveProperty("posts");
 		});
 	});
-	// test("Should return 401, as the feed is not available for unauthorised users", async () => {
-	// 	const response = await request(app).get("/feed").set("Accept", "application/json");
+	test("Should return 401, as the feed is not available for unauthorised users", async () => {
+		const response = await request(app).get("/feed").set("Accept", "application/json");
 
-	// 	expect(response.status).toBe(401); //TODO: FIX session.js to return 401 when token is invalid.
-	// });
+		expect(response.status).toBe(401);
+	});
 	test("Should return 200 and an empty array, as the user does not follow anyone", async () => {
 		const db = await database.getConnection();
 		const user = await db.collection("users").findOne({ username: "a" });
