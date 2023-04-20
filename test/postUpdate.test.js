@@ -1,11 +1,12 @@
 const request = require("supertest");
+const database = require("../src/database.js");
 const { router } = require("../src/router.js");
 const express = require("express");
 const app = express();
 
 app.use(router);
 
-describe("POST /post/:postId", () => {
+describe("PUT /post/:postId", () => {
   let accessToken;
   let postId;
 
@@ -21,13 +22,14 @@ describe("POST /post/:postId", () => {
       .send({ content: "Original content" })
       .set("Accept", "application/json")
       .set("cookie", accessToken);
+    console.log("newPost.body:", newPost.body); // Update this line
 
     postId = newPost.body.postId;
   });
 
   test("should return 200, and update the post", async () => {
     const response = await request(app)
-      .post(`/post/${postId}`)
+      .put(`/post/${postId}`)
       .send({ content: "Updated content" })
       .set("Accept", "application/json")
       .set("cookie", accessToken);
@@ -38,7 +40,7 @@ describe("POST /post/:postId", () => {
 
   test("should return 404, and not update the post", async () => {
     const response = await request(app)
-      .post("/post/invalid_post_id")
+      .put("/post/123456789012")
       .send({ content: "Updated content" })
       .set("Accept", "application/json")
       .set("cookie", accessToken);
@@ -49,6 +51,10 @@ describe("POST /post/:postId", () => {
 
   afterEach(async () => {
     const db = await database.getConnection();
-    await db.collection("users").deleteMany({ username: "test-update-post" });
+    await db.collection("users").deleteOne({ username: "test-update-post" });
+  });
+
+  afterAll(async () => {
+    await database.closeConnection();
   });
 });
