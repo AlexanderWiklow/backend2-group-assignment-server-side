@@ -55,6 +55,6 @@ describe("PUT /post/:postId", () => {
   });
 
   afterAll(async () => {
-    await database.closeConnection();
+    await database.closeClient();
   });
 });
