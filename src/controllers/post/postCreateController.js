@@ -9,15 +9,16 @@ async function postCreateController(req, res) {
 
   const db = await database.getConnection();
   const post = {
+    _id: new ObjectId(),
     content,
     createdAt: new Date(),
+    likes: [],
+    comments: []
   };
 
-  await db
-    .collection("users")
-    .updateOne({ _id: new ObjectId(postOwnersID) }, { $push: { posts: post } });
+  await db.collection("users").updateOne({ _id: new ObjectId(postOwnersID) }, { $push: { posts: post } });
 
-  return res.status(201).json({ message: "Post created" });
+  return res.status(201).json({ message: "Post created", postId: post._id });
 }
 
 module.exports = { postCreateController };
