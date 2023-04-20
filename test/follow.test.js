@@ -32,11 +32,11 @@ describe("POST /follow", () => {
 		expect(unFollowUserRes.status).toBe(200);
 		expect(unFollowUserRes.body).toEqual({ message: "Unfollowed user" });
 	});
-	// test("Should return 401, as following is not available for unauthorised users", async () => {
-	// 	const response = await request(app).post("/follow").send({ targetUserID: "6436c4b32d0e8b50dd369ae0" }).set("Accept", "application/json");
+	test("Should return 401, as following is not available for unauthorised users", async () => {
+		const response = await request(app).post("/follow").send({ targetUserID: "6436c4b32d0e8b50dd369ae0" }).set("Accept", "application/json");
 
-	// 	expect(response.status).toBe(401); //TODO: FIX session.js to return 401 when token is invalid.
-	// });
+		expect(response.status).toBe(401);
+	});
 	test("Should return 404 as the target user does not exist", async () => {
 		const db = await database.getConnection();
 		const user = await db.collection("users").findOne({ username: "follow-test-user" });
