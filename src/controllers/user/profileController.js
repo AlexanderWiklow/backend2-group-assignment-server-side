@@ -19,10 +19,12 @@ async function profileController(req, res) {
 
 	//Each post is modified to contain weather this specific client has liked the post or not.
 	//This is done since the client can not determine weather they have liked or not, as their own userID is baked into the JWT.
-	const posts = foundUser.posts.map((post) => {
-		post.clientHasLiked = post.likes.includes(userID);
-		return post;
-	});
+	const posts =
+		foundUser.posts?.map((post) => {
+			post.clientHasLiked = post.likes.includes(userID);
+			post.clientIsAuthor = userID === foundUser._id.toString();
+			return post;
+		}) || [];
 
 	const publicUser = {
 		id: foundUser._id,
