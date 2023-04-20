@@ -3,6 +3,7 @@ const { Router, json } = require("express");
 const { validate } = require("./validator");
 const { verifySessionMiddleware } = require("./session");
 
+const { profileController } = require("./controllers/user/profileController");
 const { registerController } = require("./controllers/user/registerController");
 const { loginController } = require("./controllers/user/loginController");
 
@@ -17,6 +18,8 @@ router.get("/", (req, res) => {
 });
 
 //user
+router.get("/profile/:username", validate.user.profile, profileController);
+
 router.post("/user", json(), validate.user.register, registerController);
 
 router.post("/user/login", json(), validate.user.login, loginController);
