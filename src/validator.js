@@ -1,42 +1,43 @@
 const joi = require("joi");
 const validator = require("express-joi-validation").createValidator();
 
-const {
-  isValidMongoDBObjectId,
-} = require("./joi-custom-validators/objectIdValidator.js");
+const { isValidMongoDBObjectId } = require("./joi-custom-validators/objectIdValidator.js");
 
 const schema = {
   user: {
     profile: joi.object({
-      username: joi.string().required(),
+      username: joi.string().required()
     }),
     follow: joi.object({
-      targetUserID: joi.required().custom(isValidMongoDBObjectId),
+      targetUserID: joi.required().custom(isValidMongoDBObjectId)
     }),
     register: joi.object({
       username: joi.string().required(),
-      password: joi.string().required(),
+      password: joi.string().required()
     }),
     login: joi.object({
       username: joi.string().required(),
-      password: joi.string().required(),
-    }),
+      password: joi.string().required()
+    })
   },
   post: {
     create: joi.object({
-      content: joi.string().required(),
+      content: joi.string().required()
     }),
     update: joi.object({
-      content: joi.string().required(),
+      content: joi.string().required()
     }),
     like: joi.object({
       targetUser: joi.string().required(),
-      targetPost: joi.required().custom(isValidMongoDBObjectId),
+      targetPost: joi.required().custom(isValidMongoDBObjectId)
     }),
     delete: joi.object({
-      postID: joi.string().required(),
+      postID: joi.string().required()
     }),
-  },
+    comment: joi.object({
+      comment: joi.string().required()
+    })
+  }
 };
 
 const validate = {
@@ -44,14 +45,15 @@ const validate = {
     profile: validator.params(schema.user.profile),
     follow: validator.body(schema.user.follow),
     register: validator.body(schema.user.register),
-    login: validator.body(schema.user.login),
+    login: validator.body(schema.user.login)
   },
   post: {
     create: validator.body(schema.post.create),
     update: validator.body(schema.post.update),
     like: validator.body(schema.post.like),
     delete: validator.query(schema.post.delete),
-  },
+    comment: validator.body(schema.post.comment)
+  }
 };
 
 exports.validate = validate;
