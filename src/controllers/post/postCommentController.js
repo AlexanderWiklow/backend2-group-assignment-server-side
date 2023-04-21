@@ -8,8 +8,10 @@ async function postCommentController(req, res) {
   const { comment } = req.body;
 
   const db = await database.getConnection();
+
+  const user = await db.collection("users").findOne({ _id: new ObjectId(commenterID) });
   const newComment = {
-    sender: new ObjectId(commenterID),
+    sender: user.username,
     comment,
     createdAt: new Date()
   };
