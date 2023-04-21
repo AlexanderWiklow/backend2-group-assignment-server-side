@@ -35,7 +35,6 @@ const schema = {
     }),
     delete: joi.object({
       postID: joi.string().required(),
-      userID: joi.string().required(),
     }),
   },
 };
