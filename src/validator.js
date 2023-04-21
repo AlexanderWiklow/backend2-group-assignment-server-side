@@ -8,6 +8,9 @@ const schema = {
 		profile: joi.object({
 			username: joi.string().required()
 		}),
+		follow: joi.object({
+			targetUserID: joi.required().custom(isValidMongoDBObjectId)
+		}),
 		register: joi.object({
 			username: joi.string().required(),
 			password: joi.string().required()
@@ -34,6 +37,7 @@ const schema = {
 const validate = {
 	user: {
 		profile: validator.params(schema.user.profile),
+		follow: validator.body(schema.user.follow),
 		register: validator.body(schema.user.register),
 		login: validator.body(schema.user.login)
 	},

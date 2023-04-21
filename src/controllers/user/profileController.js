@@ -1,3 +1,4 @@
+const mongodb = require("mongodb");
 const cookie = require("cookie");
 
 const database = require("../../database.js");
@@ -17,6 +18,14 @@ async function profileController(req, res) {
 	const foundUser = await db.collection("users").findOne({ username });
 	if (foundUser === null) return res.status(404).json({ message: "User not found" });
 
+	const clientIsProfileOwner = foundUser._id.toString() === userID;
+	let clientIsFollowing;
+	if (clientIsProfileOwner || !userID) {
+		clientIsFollowing = false;
+	} else {
+		clientIsFollowing = !!(await db.collection("users").findOne({ _id: new mongodb.ObjectId(userID), follows: foundUser._id.toString() }));
+	}
+
 	//Each post is modified to contain weather this specific client has liked the post or not.
 	//This is done since the client can not determine weather they have liked or not, as their own userID is baked into the JWT.
 	const posts =
@@ -29,6 +38,8 @@ async function profileController(req, res) {
 	const publicUser = {
 		id: foundUser._id,
 		username: foundUser.username,
+		clientIsProfileOwner,
+		clientIsFollowing,
 		posts
 	};
 
