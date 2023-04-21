@@ -47,7 +47,7 @@ router.post(
 
 router.get("/feed", verifySessionMiddleware, feedController);
 
-router.get("/users", getAllUsers);
+router.get("/users", verifySessionMiddleware, getAllUsers);
 
 //post
 router.post(
