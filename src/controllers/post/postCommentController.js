@@ -7,6 +7,8 @@ async function postCommentController(req, res) {
   const { postId } = req.params;
   const { comment } = req.body;
 
+  if (!ObjectId.isValid(postId)) return res.status(400).json({ message: "Invalid post ID" });
+
   const db = await database.getConnection();
 
   const user = await db.collection("users").findOne({ _id: new ObjectId(commenterID) });
