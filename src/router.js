@@ -4,6 +4,7 @@ const { validate } = require("./validator");
 const { verifySessionMiddleware } = require("./session");
 
 const { profileController } = require("./controllers/user/profileController");
+const { myProfileController } = require("./controllers/user/myProfileController");
 const { registerController } = require("./controllers/user/registerController");
 const { loginController } = require("./controllers/user/loginController");
 const { followController } = require("./controllers/user/followController");
@@ -32,6 +33,8 @@ router.get("/", (req, res) => {
 
 //user
 router.get("/profile/:username", validate.user.profile, profileController);
+
+router.get("/profile", verifySessionMiddleware, myProfileController);
 
 router.post("/user", json(), validate.user.register, registerController);
 
