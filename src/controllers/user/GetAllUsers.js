@@ -10,8 +10,6 @@ async function getAllUsers(req, res) {
       .find({}, { projection: { password: 0 } })
       .toArray();
 
-    console.log("users: ", users);
-
     return res.status(200).json(users);
   } catch (error) {
     console.error(error);
