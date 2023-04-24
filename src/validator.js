@@ -32,7 +32,7 @@ const schema = {
       targetPost: joi.required().custom(isValidMongoDBObjectId)
     }),
     delete: joi.object({
-      postID: joi.string().required()
+      postID: joi.required().custom(isValidMongoDBObjectId)
     }),
     comment: joi.object({
       comment: joi.string().required()

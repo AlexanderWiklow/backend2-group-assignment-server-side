@@ -8,6 +8,8 @@ async function postUpdateController(req, res) {
   const { postId } = req.params;
   const { content } = req.body;
 
+  if (!ObjectId.isValid(postId)) return res.status(400).json({ message: "Invalid post ID" });
+
   const db = await database.getConnection();
   const updatedPost = {
     "posts.$.content": content
