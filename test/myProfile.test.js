@@ -22,8 +22,8 @@ describe("GET /profile", () => {
 
 		const response = await request(app).get("/profile").set("cookie", accessToken);
 
-		expect(response.statusCode).toBe(302);
-		expect(response.headers["location"]).toBe("/profile/Karl");
+		expect(response.statusCode).toBe(200);
+		expect(response.body.redirect).toBe("/profile/Karl");
 	});
 });
 
