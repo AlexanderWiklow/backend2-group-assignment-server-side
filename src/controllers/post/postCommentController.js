@@ -26,7 +26,7 @@ async function postCommentController(req, res) {
     return res.status(404).json({ message: "Post not found or comment not added" });
   }
 
-  return res.status(201).json({ message: "Comment added successfully" });
+  return res.status(201).json({ message: "Comment added successfully", newComment });
 }
 
 module.exports = { postCommentController };
