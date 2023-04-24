@@ -17,7 +17,7 @@ async function postDeleteController(req, res) {
       );
 
     if (result.modifiedCount === 0) {
-      throw new Error("Post not found");
+      return res.status(404).json({ message: "Post not found" });
     }
 
     return res.status(204).json({ message: "Post deleted successfully" });
